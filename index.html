@@ -3,166 +3,361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Happy Birthday!</title>
+<title>Birthday Surprise ❤️</title>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-    margin:0;
-    overflow:hidden;
-    background:black;
-    color:white;
-    font-family:Arial, sans-serif;
-    text-align:center;
+background:linear-gradient(135deg,#0f0c29,#302b63,#24243e);
+min-height:100vh;
+overflow:hidden;
+color:white;
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
 }
 
-#countdown{
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    font-size:120px;
-    font-weight:bold;
-}
-
-#message{
-    display:none;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
+.container{
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(10px);
+padding:30px;
+border-radius:25px;
+width:90%;
+max-width:700px;
+box-shadow:0 0 30px rgba(255,255,255,0.2);
+z-index:2;
 }
 
 h1{
-    font-size:60px;
-    color:gold;
+margin-bottom:20px;
+font-size:3rem;
+animation:glow 2s infinite alternate;
 }
 
-p{
-    font-size:24px;
+@keyframes glow{
+from{ text-shadow:0 0 10px #fff; }
+to{ text-shadow:0 0 30px pink; }
+}
+
+button{
+padding:12px 20px;
+margin:8px;
+border:none;
+border-radius:30px;
+font-size:16px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+transform:scale(1.08);
+}
+
+#output{
+margin-top:20px;
+font-size:1.2rem;
+min-height:100px;
 }
 
 canvas{
-    position:absolute;
-    top:0;
-    left:0;
+position:fixed;
+top:0;
+left:0;
+z-index:0;
 }
+
+.heart{
+position:fixed;
+font-size:25px;
+animation:float 6s linear infinite;
+pointer-events:none;
+}
+
+@keyframes float{
+0%{
+transform:translateY(100vh);
+opacity:1;
+}
+100%{
+transform:translateY(-100px);
+opacity:0;
+}
+}
+
+#countdown{
+font-size:70px;
+font-weight:bold;
+margin-top:20px;
+}
+
 </style>
 </head>
 
 <body>
 
-<div id="countdown">10</div>
+<div class="container">
 
-<div id="message">
-    <h1>🎉 Happy Birthday! 🎉</h1>
-    <p>
-        Wishing you endless happiness, success,<br>
-        and all the beautiful things you deserve. ❤️
-    </p>
+<h1>🎉 Happy Birthday Anjali🎉</h1>
+
+<p>
+Welcome to your special surprise ❤️
+</p>
+
+<br>
+
+<button onclick="showMessage()">💌 Secret Message</button>
+
+<button onclick="showQuote()">😂 Funny Quote</button>
+
+<button onclick="showFortune()">🔮 Birthday Fortune</button>
+
+<button onclick="showReason()">❤️ Why You're Awesome</button>
+
+<button onclick="launchFireworks()">🎆 Fireworks</button>
+
+<button onclick="finalSurprise()">🎂 Final Surprise</button>
+
+<div id="output"></div>
+
 </div>
 
-<canvas id="fireworks"></canvas>
-
-<audio id="music" autoplay>
-    <source src="birthday.mp3" type="audio/mpeg">
-</audio>
+<canvas id="canvas"></canvas>
 
 <script>
-let count = 10;
-const countdown = document.getElementById("countdown");
-const message = document.getElementById("message");
-const music = document.getElementById("music");
 
-const timer = setInterval(()=>{
-    count--;
-    countdown.innerText = count;
+const output=document.getElementById("output");
 
-    if(count <= 0){
-        clearInterval(timer);
-        countdown.style.display = "none";
-        message.style.display = "block";
-        startFireworks();
+const quotes=[
+"Calories don't count on birthdays 🎂",
+"You're officially older today 😂",
+"Growing old is mandatory, growing up is optional 😎",
+"Today's mission: eat cake 🍰"
+];
 
-        music.play().catch(()=>{});
-    }
-},1000);
+const fortunes=[
+"✨ This year brings success.",
+"🍀 Luck level today: 99%",
+"🌟 Something amazing is coming.",
+"💖 Happiness is waiting for you."
+];
 
-const canvas = document.getElementById("fireworks");
-const ctx = canvas.getContext("2d");
+const reasons=[
+"❤️ You're kind.",
+"😂 You're funny.",
+"🌸 You're caring.",
+"✨ You're unique.",
+"🤗 You make people smile."
+];
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+function showMessage(){
 
-let particles = [];
+output.innerHTML=`
+<h2>💌 Secret Message</h2>
+<p>
+Thank you for being such an amazing friend.
+May your life be filled with happiness,
+success and lots of beautiful memories ❤️
+</p>
+`;
+
+}
+
+function showQuote(){
+
+output.innerHTML=
+quotes[Math.floor(Math.random()*quotes.length)];
+
+}
+
+function showFortune(){
+
+output.innerHTML=
+fortunes[Math.floor(Math.random()*fortunes.length)];
+
+}
+
+function showReason(){
+
+output.innerHTML=
+reasons[Math.floor(Math.random()*reasons.length)];
+
+}
+
+function createHeart(){
+
+const heart=document.createElement("div");
+
+heart.className="heart";
+
+heart.innerHTML="❤️";
+
+heart.style.left=Math.random()*100+"vw";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>{
+heart.remove();
+},6000);
+
+}
+
+setInterval(createHeart,500);
+
+const canvas=document.getElementById("canvas");
+
+const ctx=canvas.getContext("2d");
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
 
 function Particle(x,y,color){
-    this.x=x;
-    this.y=y;
-    this.color=color;
-    this.radius=2;
 
-    this.vx=(Math.random()-0.5)*8;
-    this.vy=(Math.random()-0.5)*8;
+this.x=x;
+this.y=y;
+this.color=color;
 
-    this.alpha=1;
+this.radius=2;
 
-    this.draw=function(){
-        ctx.save();
-        ctx.globalAlpha=this.alpha;
-        ctx.beginPath();
-        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
-        ctx.fillStyle=this.color;
-        ctx.fill();
-        ctx.restore();
-    }
+this.vx=(Math.random()-0.5)*8;
+this.vy=(Math.random()-0.5)*8;
 
-    this.update=function(){
-        this.x+=this.vx;
-        this.y+=this.vy;
-        this.alpha-=0.01;
-        this.draw();
-    }
+this.alpha=1;
+
+this.draw=function(){
+
+ctx.save();
+
+ctx.globalAlpha=this.alpha;
+
+ctx.beginPath();
+
+ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+
+ctx.fillStyle=this.color;
+
+ctx.fill();
+
+ctx.restore();
+
+}
+
+this.update=function(){
+
+this.x+=this.vx;
+this.y+=this.vy;
+this.alpha-=0.01;
+
+this.draw();
+
+}
+
 }
 
 function explode(){
-    const x=Math.random()*canvas.width;
-    const y=Math.random()*canvas.height/2;
 
-    const colors=["red","yellow","cyan","lime","orange","pink"];
+let colors=[
+"red",
+"yellow",
+"cyan",
+"lime",
+"pink",
+"orange",
+"white"
+];
 
-    for(let i=0;i<100;i++){
-        particles.push(
-            new Particle(
-                x,
-                y,
-                colors[Math.floor(Math.random()*colors.length)]
-            )
-        );
-    }
+let x=Math.random()*canvas.width;
+
+let y=Math.random()*canvas.height/2;
+
+for(let i=0;i<120;i++){
+
+particles.push(
+new Particle(
+x,
+y,
+colors[Math.floor(Math.random()*colors.length)]
+)
+);
+
+}
+
 }
 
 function animate(){
-    requestAnimationFrame(animate);
 
-    ctx.fillStyle="rgba(0,0,0,0.2)";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+requestAnimationFrame(animate);
 
-    particles.forEach((p,index)=>{
-        p.update();
+ctx.fillStyle="rgba(0,0,0,0.15)";
+ctx.fillRect(0,0,canvas.width,canvas.height);
 
-        if(p.alpha<=0){
-            particles.splice(index,1);
-        }
-    });
+particles.forEach((p,index)=>{
+
+p.update();
+
+if(p.alpha<=0){
+particles.splice(index,1);
 }
 
-function startFireworks(){
-    animate();
+});
 
-    setInterval(()=>{
-        explode();
-    },500);
 }
+
+animate();
+
+function launchFireworks(){
+
+for(let i=0;i<8;i++){
+
+setTimeout(explode,i*300);
+
+}
+
+}
+
+function finalSurprise(){
+
+let count=5;
+
+output.innerHTML=
+`<div id="countdown">${count}</div>`;
+
+let timer=setInterval(()=>{
+
+count--;
+
+document.getElementById("countdown").innerHTML=count;
+
+if(count<=0){
+
+clearInterval(timer);
+
+output.innerHTML=`
+<h1>🎆 HAPPY BIRTHDAY 🎆</h1>
+
+<p>
+May all your dreams come true ❤️
+<br><br>
+Thank you for being an amazing friend 🌸
+</p>
+`;
+
+setInterval(explode,500);
+
+}
+
+},1000);
+
+}
+
 </script>
 
 </body>
