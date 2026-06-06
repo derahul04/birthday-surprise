@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday!</title>
+
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    color:white;
+    font-family:Arial, sans-serif;
+    text-align:center;
+}
+
+#countdown{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    font-size:120px;
+    font-weight:bold;
+}
+
+#message{
+    display:none;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+}
+
+h1{
+    font-size:60px;
+    color:gold;
+}
+
+p{
+    font-size:24px;
+}
+
+canvas{
+    position:absolute;
+    top:0;
+    left:0;
+}
+</style>
+</head>
+
+<body>
+
+<div id="countdown">10</div>
+
+<div id="message">
+    <h1>🎉 Happy Birthday! 🎉</h1>
+    <p>
+        Wishing you endless happiness, success,<br>
+        and all the beautiful things you deserve. ❤️
+    </p>
+</div>
+
+<canvas id="fireworks"></canvas>
+
+<audio id="music" autoplay>
+    <source src="birthday.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let count = 10;
+const countdown = document.getElementById("countdown");
+const message = document.getElementById("message");
+const music = document.getElementById("music");
+
+const timer = setInterval(()=>{
+    count--;
+    countdown.innerText = count;
+
+    if(count <= 0){
+        clearInterval(timer);
+        countdown.style.display = "none";
+        message.style.display = "block";
+        startFireworks();
+
+        music.play().catch(()=>{});
+    }
+},1000);
+
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particles = [];
+
+function Particle(x,y,color){
+    this.x=x;
+    this.y=y;
+    this.color=color;
+    this.radius=2;
+
+    this.vx=(Math.random()-0.5)*8;
+    this.vy=(Math.random()-0.5)*8;
+
+    this.alpha=1;
+
+    this.draw=function(){
+        ctx.save();
+        ctx.globalAlpha=this.alpha;
+        ctx.beginPath();
+        ctx.arc(this.x,this.y,this.radius,0,Math.PI*2);
+        ctx.fillStyle=this.color;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    this.update=function(){
+        this.x+=this.vx;
+        this.y+=this.vy;
+        this.alpha-=0.01;
+        this.draw();
+    }
+}
+
+function explode(){
+    const x=Math.random()*canvas.width;
+    const y=Math.random()*canvas.height/2;
+
+    const colors=["red","yellow","cyan","lime","orange","pink"];
+
+    for(let i=0;i<100;i++){
+        particles.push(
+            new Particle(
+                x,
+                y,
+                colors[Math.floor(Math.random()*colors.length)]
+            )
+        );
+    }
+}
+
+function animate(){
+    requestAnimationFrame(animate);
+
+    ctx.fillStyle="rgba(0,0,0,0.2)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach((p,index)=>{
+        p.update();
+
+        if(p.alpha<=0){
+            particles.splice(index,1);
+        }
+    });
+}
+
+function startFireworks(){
+    animate();
+
+    setInterval(()=>{
+        explode();
+    },500);
+}
+</script>
+
+</body>
+</html>
